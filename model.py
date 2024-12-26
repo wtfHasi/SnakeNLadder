@@ -1,10 +1,9 @@
-import random
-from mesa import Model
 import mesa
+from agent import PlayerAgent
+import random
+from mesa.datacollection import DataCollector
 
-from agent import PlayerAgent  # Import the agent class
-
-class SnakeAndLaddersModel(Model):
+class SnakeAndLaddersModel(mesa.Model):
     def __init__(self, num_players):
         super().__init__()
         self.num_players = num_players
@@ -13,17 +12,28 @@ class SnakeAndLaddersModel(Model):
         self.ladders = {2: 38, 7: 14, 8: 31, 15: 26, 28: 84, 36: 44, 51: 67, 71: 91, 78: 98, 87: 94}
         self.winner = None
 
-        # Track player agents explicitly if needed
         self.player_agents = []  # Custom storage, not overwriting model.agents
 
         # Add players to the model
         for _ in range(self.num_players):
             player = PlayerAgent(self)
-            self.player_agents.append(player)  # Keep reference in custom storage
+            self.player_agents.append(player)
             self.grid.place_agent(player, (0, 0))  # Place agent at the start
+            print(f"Player {player.unique_id} created")  # Verify unique IDs
+            
+        # Initialize DataCollector
+        self.datacollector = DataCollector(
+            model_reporters={},
+            agent_reporters={
+                "Position": lambda agent: agent.position,
+                "Dice Value": lambda agent: agent.dice_value
+            }
+        )
 
     def step(self):
         """Advance the model by one step."""
         random.shuffle(self.player_agents)  # Shuffle players manually
         for agent in self.player_agents:
             agent.step()
+        # Collect data at the end of each step
+        self.datacollector.collect(self)

@@ -1,15 +1,17 @@
+import mesa
 import random
-from mesa import Agent
 
-class PlayerAgent(Agent):
+class PlayerAgent(mesa.Agent):
     def __init__(self, model):
         super().__init__(model)
-        self.position = 1  # Start at position 1
+        self.position = 1  # Start at position 1 (bottom-left of the board)
         self.grid_pos = (0, 0)  # Start at (0, 0)
+        self.dice_value = 0  # Initialize dice value
 
     def roll_dice(self):
-        """Roll a dice and return a number between 1 and 6."""
-        return random.randint(1, 6)
+        """Roll a dice and update the dice_value attribute."""
+        self.dice_value = random.randint(1, 6)
+        return self.dice_value
 
     def calculate_new_position(self, new_position):
         """Convert board position to grid coordinates."""
@@ -22,6 +24,8 @@ class PlayerAgent(Agent):
     def move(self):
         """Move the player based on dice roll and handle snakes/ladders."""
         dice_roll = self.roll_dice()
+        
+        # Calculate new position
         new_position = self.position + dice_roll
         if new_position > 100:
             new_position = self.position  # Stay in the same position if roll exceeds 100
@@ -44,8 +48,9 @@ class PlayerAgent(Agent):
 
     def step(self):
         """Define the player's actions for each step."""
-        self.move()
-        if self.position == 100:
-            print(f"Player {self.unique_id} wins!")
-            self.model.winner = self.unique_id
-            self.model.running = False  # End the simulation
+        if self.model.winner is None:  # Only proceed if there's no winner yet
+            self.move()
+            if self.position == 100:
+                print(f"Player {self.unique_id} wins!")
+                self.model.winner = self.unique_id
+                self.model.running = False  # End the simulation
