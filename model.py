@@ -1,6 +1,5 @@
 import mesa
 from agent import PlayerAgent
-import random
 from mesa.datacollection import DataCollector
 
 class SnakeAndLaddersModel(mesa.Model):
@@ -32,7 +31,6 @@ class SnakeAndLaddersModel(mesa.Model):
 
     def step(self):
         """Advance the model by one step."""
-        random.shuffle(self.player_agents)  # Shuffle players manually
         for agent in self.player_agents:
             agent.step()
         # Collect data at the end of each step
