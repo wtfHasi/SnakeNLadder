@@ -1,10 +1,7 @@
 from model import SnakeAndLaddersModel
 
-# Number of players (can be modified)
-num_players = 2
-
 # Create initial model instance with the number of players
-model = SnakeAndLaddersModel(num_players=num_players)
+model = SnakeAndLaddersModel(2)
 
 # Run the model until one player reaches the finish
 step_count = 0
