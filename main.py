@@ -1,6 +1,4 @@
 from model import SnakeAndLaddersModel
-from agent import PlayerAgent
-import random
 
 # Create initial model instance with 2 players
 model1 = SnakeAndLaddersModel(num_players=2)
