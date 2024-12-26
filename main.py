@@ -100,10 +100,6 @@ while model.winner is None and running:
     for i, player in enumerate(model.player_agents):
         draw_player(player, PLAYER_COLORS[i])
 
-    # Draw player status (position and turn)
-    for i, player in enumerate(model.player_agents):
-        draw_text(f"Player {i+1}: {player.position}", font, PLAYER_COLORS[i], 20, 20 + (i * 30))
-
     # Check for winner
     if model.winner is not None:
         draw_text(f"Player {model.winner} wins!", font, BLACK, WIDTH // 2 - 100, HEIGHT - 50)
@@ -112,7 +108,7 @@ while model.winner is None and running:
     pygame.display.flip()
 
     # Delay to make game visible (simulation step)
-    pygame.time.wait(500)
+    pygame.time.wait(1000)
 
     # Event handling (to close the window if needed)
     for event in pygame.event.get():
