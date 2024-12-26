@@ -21,10 +21,30 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake and Ladders")
 
-# Function to draw the grid
+# Function to draw the grid and number the cells
 def draw_grid():
     cell_width = WIDTH // GRID_SIZE
     cell_height = HEIGHT // GRID_SIZE
+    number = 1
+
+    # Loop through the rows and columns
+    for row in range(GRID_SIZE - 1, -1, -1):  # Iterate rows from bottom to top
+        if row % 2 == 0:  # Even rows (start from the right)
+            for col in range(GRID_SIZE - 1, -1, -1):
+                x = col * cell_width + cell_width // 2
+                y = row * cell_height + cell_height // 2
+                text = font.render(str(number), True, BLACK)
+                screen.blit(text, (x - text.get_width() // 2, y - text.get_height() // 2))
+                number += 1
+        else:  # Odd rows (start from the left)
+            for col in range(GRID_SIZE):
+                x = col * cell_width + cell_width // 2
+                y = row * cell_height + cell_height // 2
+                text = font.render(str(number), True, BLACK)
+                screen.blit(text, (x - text.get_width() // 2, y - text.get_height() // 2))
+                number += 1
+
+    # Draw the grid lines
     for x in range(0, WIDTH, cell_width):
         pygame.draw.line(screen, BLACK, (x, 0), (x, HEIGHT), 2)
     for y in range(0, HEIGHT, cell_height):
@@ -77,7 +97,7 @@ def draw_snakes_and_ladders(snakes, ladders):
 model = SnakeAndLaddersModel(2)
 
 # Set up font for text rendering
-font = pygame.font.SysFont('Arial', 24)
+font = pygame.font.SysFont('Arial', 18)
 
 # Run the simulation until one player reaches the finish
 running = True
@@ -90,7 +110,7 @@ while model.winner is None and running:
     # Clear the screen
     screen.fill(WHITE)
 
-    # Draw the grid
+    # Draw the grid with numbered cells
     draw_grid()
 
     # Draw the snakes and ladders
